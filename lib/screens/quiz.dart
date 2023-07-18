@@ -5,6 +5,10 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:teachiz/components/quiz_option.dart';
 
 class Quiz extends StatefulWidget {
+  final String quiz;
+
+  Quiz({required this.quiz});
+
   @override
   _QuizState createState() => _QuizState();
 }
@@ -78,6 +82,9 @@ class _QuizState extends State<Quiz> {
 
   @override
   Widget build(BuildContext context) {
+    String quizText = widget.quiz;
+    print("query:");
+    print(quizText);
     var _selectedAnswer = selectedAnswer?.toInt() ?? 5; //occhio pure qui
     ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -112,6 +119,15 @@ class _QuizState extends State<Quiz> {
                         ],
                       ),
                     ),
+                    //cancellare debug
+                    Text(
+                      quizText,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ), //cancellare debug
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,

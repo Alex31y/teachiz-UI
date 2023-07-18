@@ -18,7 +18,11 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         'start': (context) => Start(),
-        'quiz': (context) => Quiz(),
+        'quiz': (context) {
+          final String quiz =
+              ModalRoute.of(context)!.settings.arguments as String;
+          return Quiz(quiz: quiz);
+        },
         'result': (context) => Result(),
       },
       home: Start(),
