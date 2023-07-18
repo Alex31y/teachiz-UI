@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teachiz/components/custom_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Start extends StatefulWidget {
   @override
@@ -9,11 +10,22 @@ class Start extends StatefulWidget {
 class _StartState extends State<Start> {
   final TextEditingController _queryController = TextEditingController();
   String _query = '';
+  late Locale _currentLocale;
+  bool _isEnglish = false;
 
   @override
-  void dispose() {
-    _queryController.dispose();
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _currentLocale = EasyLocalization.of(context)!.locale;
+    _isEnglish = _currentLocale.languageCode == 'en';
+  }
+
+  void _toggleLanguage() {
+    setState(() {
+      _currentLocale = _isEnglish ? Locale('it') : Locale('en');
+      _isEnglish = !_isEnglish;
+    });
+    context.setLocale(_currentLocale);
   }
 
   @override
@@ -35,11 +47,11 @@ class _StartState extends State<Start> {
                 fit: BoxFit.cover,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Voglio imparare:',
-                style: TextStyle(
+                tr('home'),
+                style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -58,9 +70,9 @@ class _StartState extends State<Start> {
                     _query = value;
                   });
                 },
-                decoration: const InputDecoration(
-                  hintText: "Che cos'è l'inflazione?",
-                  hintStyle: TextStyle(
+                decoration: InputDecoration(
+                  hintText: tr('hint'),
+                  hintStyle: const TextStyle(
                     color: Colors.white,
                   ),
                   border: OutlineInputBorder(),
@@ -74,10 +86,26 @@ class _StartState extends State<Start> {
                   Navigator.pushReplacementNamed(context, 'quiz',
                       arguments: _query);
                 },
-                child: const CustomButton(text: 'Start Quiz!'),
+                child: CustomButton(
+                  text: tr('startquiz'),
+                ),
               ),
             ),
           ],
+        ),
+      ),
+      floatingActionButton: Positioned(
+        bottom: 16.0,
+        right: 16.0,
+        child: FloatingActionButton(
+          onPressed: _toggleLanguage,
+          child: Image.asset(
+            _isEnglish
+                ? 'assets/images/eng_icon.png'
+                : 'assets/images/it_icon.png',
+            width: 40.0,
+            height: 40.0,
+          ),
         ),
       ),
     );
