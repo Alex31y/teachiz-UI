@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teachiz/screens/start.dart';
 import 'package:teachiz/screens/quiz.dart';
 import 'package:teachiz/screens/result.dart';
+import 'package:teachiz/screens/explain.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
@@ -39,7 +40,31 @@ class MyApp extends StatelessWidget {
               ModalRoute.of(context)!.settings.arguments as String;
           return Quiz(quiz: quiz);
         },
-        'result': (context) => Result(),
+        'explain': (context) {
+          final Map<String, dynamic> args = ModalRoute.of(context)!
+              .settings
+              .arguments as Map<String, dynamic>;
+          final String question = args['question'];
+          final String correctAnswer = args['correctAnswer'];
+          final String userAnswer = args['userAnswer'];
+          return Explain(
+            question: question,
+            correctAnswer: correctAnswer,
+            userAnswer: userAnswer,
+            onNextQuestion: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, 'quiz');
+            },
+          );
+        },
+        'result': (context) {
+          final Map<String, dynamic> args = ModalRoute.of(context)!
+              .settings
+              .arguments as Map<String, dynamic>;
+          final List<Map<String, dynamic>> wrongAnsweredQuestions =
+              args['wrongAnsweredQuestions'];
+          return Result(wrongAnsweredQuestions: wrongAnsweredQuestions);
+        },
       },
       home: Start(),
     );
