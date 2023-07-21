@@ -42,9 +42,9 @@ class _StartState extends State<Start> {
               margin: const EdgeInsets.only(bottom: 30.0),
               height: screen.width / 3,
               width: screen.width / 3,
-              child: const Image(
-                image: AssetImage('assets/images/quiz-logo.png'),
-                fit: BoxFit.cover,
+              child: Image(
+                image: AssetImage('assets/images/logo.png'),
+                fit: BoxFit.contain,
               ),
             ),
             Padding(
@@ -94,20 +94,17 @@ class _StartState extends State<Start> {
           ],
         ),
       ),
-      floatingActionButton: Positioned(
-        bottom: 16.0,
-        right: 16.0,
-        child: FloatingActionButton(
-          onPressed: _toggleLanguage,
-          child: Image.asset(
-            _isEnglish
-                ? 'assets/images/eng_icon.png'
-                : 'assets/images/it_icon.png',
-            width: 40.0,
-            height: 40.0,
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _toggleLanguage,
+        child: Image.asset(
+          _isEnglish
+              ? 'assets/images/eng_icon.png'
+              : 'assets/images/it_icon.png',
+          width: 40.0,
+          height: 40.0,
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
