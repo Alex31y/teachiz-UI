@@ -33,6 +33,7 @@ dependencies:
   http:
   html_unescape:
   easy_localization: ^3.0.2
+  cupertino_back_gesture:
 
 
   # The following adds the Cupertino Icons font to your application.

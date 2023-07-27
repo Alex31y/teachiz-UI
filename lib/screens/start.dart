@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teachiz/components/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:teachiz/screens/catalogo.dart';
 
 class Start extends StatefulWidget {
   @override
@@ -38,6 +39,7 @@ class _StartState extends State<Start> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            //immagine del logo
             Container(
               margin: const EdgeInsets.only(bottom: 30.0),
               height: screen.width / 3,
@@ -47,6 +49,8 @@ class _StartState extends State<Start> {
                 fit: BoxFit.contain,
               ),
             ),
+
+            //Label "voglio imparare"
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
@@ -58,6 +62,8 @@ class _StartState extends State<Start> {
                 ),
               ),
             ),
+
+            //text field input query dell'utente
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
@@ -79,6 +85,8 @@ class _StartState extends State<Start> {
                 ),
               ),
             ),
+
+            //submit user query
             const SizedBox(height: 16.0),
             Center(
               child: GestureDetector(
@@ -88,6 +96,24 @@ class _StartState extends State<Start> {
                 },
                 child: CustomButton(
                   text: tr('startquiz'),
+                ),
+              ),
+            ),
+
+            //catalogo query Trending Topics
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return Catalogo();
+                      },
+                    ),
+                  );
+                },
+                child: CustomButton(
+                  text: "Trending topics",
                 ),
               ),
             ),
