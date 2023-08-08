@@ -4,7 +4,7 @@ import 'package:teachiz/components/custom_button.dart';
 class Result extends StatelessWidget {
   final List<Map<String, dynamic>> wrongAnsweredQuestions;
 
-  Result({required this.wrongAnsweredQuestions});
+  const Result({super.key, required this.wrongAnsweredQuestions});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class Result extends StatelessWidget {
     int time = DateTime.now().difference(args['start_at']).inSeconds;
 
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: SingleChildScrollView(
         // Wrap the column with a SingleChildScrollView
         child: Center(
@@ -30,7 +30,7 @@ class Result extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black38,
                       offset: Offset(6.0, 12.0),
@@ -42,7 +42,7 @@ class Result extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
+                    SizedBox(
                       height: screen.width / 3.5,
                       width: screen.width / 3.5,
                       child: Image(
@@ -58,7 +58,7 @@ class Result extends StatelessWidget {
                         (args['corrects'] >= 5)
                             ? 'Congratulations!!'
                             : 'Completed!',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.w600,
                         ),
@@ -70,26 +70,26 @@ class Result extends StatelessWidget {
                         (args['corrects'] >= 5)
                             ? 'You are amazing!!'
                             : 'Better luck next time!',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20.0,
                         ),
                       ),
                     ),
                     Text(
                       '${args['corrects']}/${args['list_length']} correct answers in $time seconds.',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20.0,
                       ),
                     ),
-                    SizedBox(height: 16.0),
-                    Text(
+                    const SizedBox(height: 16.0),
+                    const Text(
                       'Wrong Answered Questions:',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: wrongAnsweredQuestions.length,
@@ -112,7 +112,7 @@ class Result extends StatelessWidget {
                       onTap: () {
                         Navigator.pushReplacementNamed(context, 'start');
                       },
-                      child: CustomButton(
+                      child: const CustomButton(
                         text: 'Play Again',
                       ),
                     ),

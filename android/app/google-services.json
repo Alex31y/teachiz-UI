@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "799517854554",
+    "project_id": "teachizlearning",
+    "storage_bucket": "teachizlearning.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799517854554:android:1ba03fb50e0f88d3090163",
+        "android_client_info": {
+          "package_name": "com.example.teachiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799517854554-b8anks22i013u4rffei5a2m8km62gsjn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJT-HjFnhY-YS34tnY2YsVFQ9yBYW8XK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799517854554-b8anks22i013u4rffei5a2m8km62gsjn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "799517854554-375kjhk6tbi6nudnhs04avrvib6k4ukb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.teachiz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

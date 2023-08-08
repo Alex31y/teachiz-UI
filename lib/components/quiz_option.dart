@@ -23,7 +23,7 @@ class QuizOption extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
         border: Border.all(
-          color: (this.selectedAnswer != index)
+          color: (selectedAnswer != index)
               ? Colors.white
               : theme.primaryColor,
           width: 2.0,
@@ -40,7 +40,7 @@ class QuizOption extends StatelessWidget {
               HtmlUnescape().convert(answer),
               maxLines: 5,
               style: TextStyle(
-                color: (this.selectedAnswer != index)
+                color: (selectedAnswer != index)
                     ? Colors.white
                     : theme.primaryColor,
                 fontSize: 16.0,
@@ -48,10 +48,10 @@ class QuizOption extends StatelessWidget {
             ),
           ),
           Icon(
-            (this.selectedAnswer != index)
+            (selectedAnswer != index)
                 ? Icons.panorama_fish_eye
                 : Icons.check_circle_outline,
-            color: (this.selectedAnswer != index)
+            color: (selectedAnswer != index)
                 ? Colors.white
                 : theme.primaryColor,
           )

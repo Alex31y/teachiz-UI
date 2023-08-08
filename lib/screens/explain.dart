@@ -6,7 +6,8 @@ class Explain extends StatelessWidget {
   final String userAnswer;
   final Function onNextQuestion;
 
-  Explain({
+  const Explain({
+    super.key,
     required this.question,
     required this.correctAnswer,
     required this.userAnswer,
@@ -17,7 +18,7 @@ class Explain extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -27,39 +28,42 @@ class Explain extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Question: $question',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Text(
                 'Correct Answer: $correctAnswer',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Text(
                 'Your Answer: $userAnswer',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                   onNextQuestion();
                 },
-                child: Text(
-                  'Go Back',
-                  style: TextStyle(fontSize: 16.0),
+                child: const Text(
+                  'Ok',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],

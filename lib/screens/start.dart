@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:teachiz/components/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:teachiz/screens/catalogo.dart';
+import 'note.dart';
 
 class Start extends StatefulWidget {
+  const Start({super.key});
+
   @override
   _StartState createState() => _StartState();
 }
@@ -23,7 +26,7 @@ class _StartState extends State<Start> {
 
   void _toggleLanguage() {
     setState(() {
-      _currentLocale = _isEnglish ? Locale('it') : Locale('en');
+      _currentLocale = _isEnglish ? const Locale('it') : const Locale('en');
       _isEnglish = !_isEnglish;
     });
     context.setLocale(_currentLocale);
@@ -34,17 +37,29 @@ class _StartState extends State<Start> {
     ThemeData theme = Theme.of(context);
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // About "?" button
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Image.asset('assets/images/question.png'),
+                iconSize: 50,
+                onPressed: () {
+                  openAbout();
+                },
+              ),
+            ),
+
             //immagine del logo
             Container(
               margin: const EdgeInsets.only(bottom: 30.0),
               height: screen.width / 3,
               width: screen.width / 3,
-              child: Image(
+              child: const Image(
                 image: AssetImage('assets/images/logo.png'),
                 fit: BoxFit.contain,
               ),
@@ -81,7 +96,7 @@ class _StartState extends State<Start> {
                   hintStyle: const TextStyle(
                     color: Colors.white,
                   ),
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -91,8 +106,15 @@ class _StartState extends State<Start> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, 'quiz',
-                      arguments: _query);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Note(
+                        query: _query,
+                        lang: _currentLocale,
+                      ),
+                    ),
+                  );
                 },
                 child: CustomButton(
                   text: tr('startquiz'),
@@ -107,12 +129,12 @@ class _StartState extends State<Start> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return Catalogo();
+                        return const Catalogo();
                       },
                     ),
                   );
                 },
-                child: CustomButton(
+                child: const CustomButton(
                   text: "Trending topics",
                 ),
               ),
@@ -132,5 +154,18 @@ class _StartState extends State<Start> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  Future openAbout() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('About'),
+          content: Text(
+              "Ciao qui è Alex lo sviluppatore che parla, quest'applicazione ha la capacità di spiegare qualsiasi cosa gli venga data in input nel caso ottimo, un generatore infinito di domande stile quiz nel caso pessimo. updatecheck"),
+          actions: [TextButton(onPressed: close, child: Text('Close'))],
+        ),
+      );
+  void close() {
+    Navigator.of(context).pop();
   }
 }

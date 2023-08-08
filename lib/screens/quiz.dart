@@ -9,36 +9,32 @@ import 'package:easy_localization/easy_localization.dart';
 class Quiz extends StatefulWidget {
   final String quiz;
 
-  Quiz({required this.quiz});
+  const Quiz({Key? key, required this.quiz}) : super(key: key);
 
   @override
   _QuizState createState() => _QuizState();
 }
 
 class _QuizState extends State<Quiz> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   List<Map<String, dynamic>> wrongAnsweredQuestions = [];
-  late List? questions;
+  List<dynamic>? questions;
   String? currentTitle;
   String? currentCorrectAnswer;
   List<dynamic>? currentAnswers;
-  late int corrects;
-  late int currentQuestion;
-  late int? selectedAnswer;
+  int corrects = 0;
+  int currentQuestion = 0;
   DateTime? now;
-  late String quizText;
-  late String lang;
+  String quizText = '';
+  String lang = '';
   String? cost;
   String? totalIterations;
+  int? selectedAnswer;
 
   @override
   void initState() {
     super.initState();
     now = DateTime.now();
-    corrects = 0;
-    currentQuestion = 0;
-    questions = null;
-    selectedAnswer = null;
     quizText = widget.quiz;
   }
 
@@ -51,26 +47,28 @@ class _QuizState extends State<Quiz> {
 
   void getQuestions() async {
     final response = await http.get(Uri.parse(
-        'https://teachizapi.ew.r.appspot.com/api/questions?query=${Uri.encodeComponent(quizText)}&lang=$lang&num=5'));
+        'https://teachizapi.ew.r.appspot.com/api/qwtfromquery?query=${Uri.encodeComponent(quizText)}&lang=$lang'));
 
-    // Decode the JSON response using UTF-8 explicitly
-    Map data = json.decode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+      List<dynamic> wrongAnswers =
+          json.decode(data['results'][0]['wrong_answ']);
+      String correctAnswer = data['results'][0]['corct_answ'];
+      List<dynamic> answers = [correctAnswer, ...wrongAnswers];
 
-    List answers = [data['results'][0]['correct_answer']] +
-        data['results'][0]['incorrect_answers'];
-    setState(() {
-      questions = data['results'];
-      currentTitle = data['results'][0]['question'];
-      currentCorrectAnswer = data['results'][0]['correct_answer'];
-      currentAnswers = answers..shuffle();
-      cost = data['price'].toStringAsFixed(4);
-      totalIterations = data['total_iterations'].toString();
-    });
+      setState(() {
+        questions = data['results'];
+        currentTitle = data['results'][0]['question'];
+        currentCorrectAnswer = data['results'][0]['corct_answ'];
+        currentAnswers = answers..shuffle();
+      });
+    }
   }
 
   void verifyAndNext(BuildContext context) {
-    var _selectedAnswer = selectedAnswer?.toInt() ?? 5;
-    String textSelectAnswer = currentAnswers![_selectedAnswer];
+    var selectedAnswerIndex = selectedAnswer ?? 5;
+    String textSelectAnswer = currentAnswers![selectedAnswerIndex];
+
     if (textSelectAnswer == currentCorrectAnswer) {
       setState(() {
         corrects++;
@@ -101,17 +99,21 @@ class _QuizState extends State<Quiz> {
   void nextQuestion(BuildContext context) {
     int actualQuestion = currentQuestion;
     if (actualQuestion + 1 < questions!.length) {
-      List answers = [questions![actualQuestion + 1]['correct_answer']] +
-          questions![actualQuestion + 1]['incorrect_answers'];
+      List<dynamic> wrongAnswers =
+          json.decode(questions![actualQuestion + 1]['wrong_answ']);
+      String correctAnswer = questions![actualQuestion + 1]['corct_answ'];
+      List<dynamic> answers = [correctAnswer, ...wrongAnswers];
+
       setState(() {
         currentQuestion++;
         currentTitle = questions![actualQuestion + 1]['question'];
-        currentCorrectAnswer = questions![actualQuestion + 1]['correct_answer'];
+        currentCorrectAnswer = questions![actualQuestion + 1]['corct_answ'];
         currentAnswers = answers..shuffle();
         selectedAnswer = null;
       });
+
       _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
@@ -126,10 +128,10 @@ class _QuizState extends State<Quiz> {
 
   @override
   Widget build(BuildContext context) {
-    var _selectedAnswer = selectedAnswer?.toInt() ?? 5;
+    var selectedAnswerIndex = selectedAnswer ?? 5;
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -140,15 +142,15 @@ class _QuizState extends State<Quiz> {
                 children: [
                   Text(
                     'cost: ${cost ?? "N/A"}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(width: 20.0),
+                  const SizedBox(width: 20.0),
                   Text(
                     'iterazioni: ${totalIterations ?? "N/A"}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       color: Colors.white,
                     ),
@@ -159,7 +161,7 @@ class _QuizState extends State<Quiz> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   (questions != null)
                       ? Padding(
@@ -183,7 +185,7 @@ class _QuizState extends State<Quiz> {
                                         Navigator.pushReplacementNamed(
                                             context, 'start');
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
                                         color: Colors.white,
                                         size: 32.0,
@@ -194,7 +196,7 @@ class _QuizState extends State<Quiz> {
                               ),
                               Text(
                                 lang, //debug
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -206,7 +208,7 @@ class _QuizState extends State<Quiz> {
                                 children: <Widget>[
                                   Text(
                                     'Question ${currentQuestion + 1}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 22.0,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
@@ -232,7 +234,7 @@ class _QuizState extends State<Quiz> {
                                 child: Text(
                                   HtmlUnescape().convert(currentTitle!),
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 22.0,
                                     color: Colors.white,
                                   ),
@@ -245,8 +247,9 @@ class _QuizState extends State<Quiz> {
                                     if (index == currentAnswers!.length) {
                                       return GestureDetector(
                                         onTap: () {
-                                          if (selectedAnswer != null)
+                                          if (selectedAnswer != null) {
                                             verifyAndNext(context);
+                                          }
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(
@@ -261,14 +264,15 @@ class _QuizState extends State<Quiz> {
                                             borderRadius:
                                                 BorderRadius.circular(180.0),
                                           ),
-                                          child: Text(
+                                          child: const Text(
                                             'Next',
                                             textAlign: TextAlign.center,
                                             maxLines: 5,
                                             style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w600),
+                                              color: Colors.white,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
                                       );
@@ -282,7 +286,7 @@ class _QuizState extends State<Quiz> {
                                       },
                                       child: QuizOption(
                                         index: index,
-                                        selectedAnswer: _selectedAnswer,
+                                        selectedAnswer: selectedAnswerIndex,
                                         answer: answer,
                                       ),
                                     );
@@ -294,7 +298,7 @@ class _QuizState extends State<Quiz> {
                         )
                       : Center(
                           child: CircularProgressIndicator(
-                            valueColor: new AlwaysStoppedAnimation<Color>(
+                            valueColor: AlwaysStoppedAnimation<Color>(
                               theme.primaryColor,
                             ),
                           ),

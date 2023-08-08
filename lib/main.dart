@@ -30,16 +30,28 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Quiz App',
         theme: ThemeData(
-          brightness: Brightness.light,
-          backgroundColor: const Color.fromRGBO(37, 44, 74, 1.0),
+          brightness: Brightness.dark,
           primaryColor: const Color.fromRGBO(190, 56, 55, 1.0),
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
+          pageTransitionsTheme: const PageTransitionsTheme(builders: {
             // for Android - default page transition
             TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
             // for iOS - one which considers ancestor BackGestureWidthTheme
             TargetPlatform.iOS:
                 CupertinoPageTransitionsBuilderCustomBackGestureWidth(),
           }),
+          colorScheme: const ColorScheme(
+            brightness: Brightness.dark,
+            primary: Color(0xFFF1F2F3),
+            onPrimary: Color(0xFFFFFFFF),
+            secondary: Color(0xFFBBBBBB),
+            onSecondary: Color(0xFFEAEAEA),
+            error: Color(0xFFF32424),
+            onError: Color(0xFFF32424),
+            background: Color(0xFF202020),
+            onBackground: Color(0xFF505050),
+            surface: Color(0x00252c4a),
+            onSurface: Color(0xFFFFFFFF),
+          ),
         ),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,

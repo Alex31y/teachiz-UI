@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:teachiz/components/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'note.dart'; // Import the Note page
+import 'note.dart';
 
 class Catalogo extends StatefulWidget {
+  const Catalogo({super.key});
+
   @override
   _CatalogoState createState() => _CatalogoState();
 }
@@ -30,8 +32,8 @@ class _CatalogoState extends State<Catalogo> {
   Future<void> _fetchData() async {
     try {
       // Get the current locale
-      Locale _currentLocale = Localizations.localeOf(context);
-      String languageCode = _currentLocale.languageCode;
+      Locale currentLocale = Localizations.localeOf(context);
+      String languageCode = currentLocale.languageCode;
 
       // Make the API call with the selected language
       final response = await http.get(Uri.parse(
@@ -80,18 +82,18 @@ class _CatalogoState extends State<Catalogo> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.colorScheme.background,
       appBar: AppBar(
-        title: Text('Topic più popolari:'),
+        title: const Text('Topic più popolari:'),
       ),
       body: _results.isEmpty
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
               itemCount: _results.length,
               itemBuilder: (context, index) {
-                String _query = _results[index];
+                String query = _results[index];
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
@@ -100,14 +102,14 @@ class _CatalogoState extends State<Catalogo> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Note(
-                            query: _query,
+                            query: query,
                             lang: _currentLocale!,
                           ),
                         ),
                       );
                     },
                     child: CustomButton(
-                      text: _query,
+                      text: query,
                     ),
                   ),
                 );
